@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GarageDesk</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>GarageDesk - Vehicle Service Job Card and Bay Scheduling</h1>
+
+<!-- Shows whether the page can reach the database through the backend -->
+<div id="status" class="status">Connecting to the server...</div>
+
+<!-- Tab buttons -->
+<div class="tabs">
+    <button data-tab="vehicles" onclick="showTab('vehicles')">Vehicles</button>
+    <button data-tab="mechanics" onclick="showTab('mechanics')">Mechanics</button>
+    <button data-tab="bays" onclick="showTab('bays')">Bays</button>
+    <button data-tab="jobcards" onclick="showTab('jobcards')">Job Cards</button>
+    <button data-tab="bills" onclick="showTab('bills')">Bills</button>
+</div>
+
+<!-- ================= VEHICLES ================= -->
+<div id="vehicles" class="tab-section active">
+    <h2>Vehicles</h2>
+    <div class="form-row">
+        <input type="text" id="vRegNo" placeholder="Registration Number *">
+        <input type="text" id="vMake" placeholder="Make (e.g. Toyota)">
+        <input type="text" id="vModel" placeholder="Model (e.g. Innova)">
+        <input type="text" id="vOwner" placeholder="Owner Name *">
+        <input type="text" id="vPhone" placeholder="Owner Phone">
+        <button id="vSaveBtn" onclick="saveEntity('vehicles')">Add Vehicle</button>
+        <button id="vCancelBtn" class="secondary hidden" onclick="cancelEdit('vehicles')">Cancel</button>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th><th>Reg. No</th><th>Make</th><th>Model</th>
+                <th>Owner</th><th>Phone</th><th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="vehicleTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ================= MECHANICS ================= -->
+<div id="mechanics" class="tab-section">
+    <h2>Mechanics</h2>
+    <div class="form-row">
+        <input type="text" id="mName" placeholder="Name *">
+        <input type="text" id="mPhone" placeholder="Phone">
+        <input type="text" id="mSpecialization" placeholder="Specialization (e.g. Engine)">
+        <button id="mSaveBtn" onclick="saveEntity('mechanics')">Add Mechanic</button>
+        <button id="mCancelBtn" class="secondary hidden" onclick="cancelEdit('mechanics')">Cancel</button>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th><th>Name</th><th>Phone</th><th>Specialization</th><th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="mechanicTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ================= BAYS ================= -->
+<div id="bays" class="tab-section">
+    <h2>Bays</h2>
+    <div class="form-row">
+        <input type="text" id="bBayNumber" placeholder="Bay Number * (e.g. Bay-1)">
+        <input type="text" id="bDescription" placeholder="Description">
+        <button id="bSaveBtn" onclick="saveEntity('bays')">Add Bay</button>
+        <button id="bCancelBtn" class="secondary hidden" onclick="cancelEdit('bays')">Cancel</button>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+            <tr><th>ID</th><th>Bay Number</th><th>Description</th><th>Action</th></tr>
+            </thead>
+            <tbody id="bayTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ================= JOB CARDS ================= -->
+<div id="jobcards" class="tab-section">
+    <h2>Job Cards</h2>
+
+    <h3>1. Create Job Card</h3>
+    <div class="form-row">
+        <select id="jcVehicle"></select>
+        <input type="text" id="jcServices" placeholder="Requested Services (e.g. Oil change)">
+        <button onclick="createJobCard()">Create Job Card</button>
+    </div>
+
+    <h3>2. Assign Bay and Mechanic</h3>
+    <div class="form-row">
+        <select id="assignJobCard"></select>
+        <select id="assignBay"></select>
+        <select id="assignMechanic"></select>
+        <button onclick="assignJobCard()">Assign</button>
+    </div>
+
+    <h3>3. Change Status</h3>
+    <div class="form-row">
+        <select id="statusJobCard"></select>
+        <select id="newStatus">
+            <option value="IN_PROGRESS">IN_PROGRESS</option>
+            <option value="QUALITY_CHECK">QUALITY_CHECK</option>
+            <option value="COMPLETED">COMPLETED</option>
+        </select>
+        <button onclick="changeStatus()">Change Status</button>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th><th>Vehicle</th><th>Bay</th><th>Mechanic</th>
+                <th>Services</th><th>Status</th><th>Created</th>
+            </tr>
+            </thead>
+            <tbody id="jobCardTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ================= BILLS ================= -->
+<div id="bills" class="tab-section">
+    <h2>Bills</h2>
+    <h3>Generate Final Bill (only for COMPLETED job cards)</h3>
+    <div class="form-row">
+        <select id="billJobCard"></select>
+        <input type="number" id="billParts" min="0" step="0.01" placeholder="Parts Cost">
+        <input type="number" id="billLabour" min="0" step="0.01" placeholder="Labour Charges">
+        <button onclick="generateBill()">Generate Bill</button>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th><th>Job Card ID</th><th>Parts Cost</th>
+                <th>Labour</th><th>Total</th><th>Date</th>
+            </tr>
+            </thead>
+            <tbody id="billTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
